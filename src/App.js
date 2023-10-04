@@ -1,8 +1,11 @@
+import Tasks from "./Tasks";
 
 function App() {
   return (
     <div className="App">
-        <div>Test</div>
+        <div>
+          <Tasks />
+        </div>
     </div>
   );
 }
