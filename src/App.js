@@ -1,11 +1,10 @@
 import Tasks from "./Tasks";
+import "./css/styles.css"
 
 function App() {
   return (
     <div className="App">
-        <div>
           <Tasks />
-        </div>
     </div>
   );
 }
