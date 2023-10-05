@@ -9,6 +9,9 @@ export default function Tasks() {
   const [taskTitle, setTaskTitle] = useState();
   const [taskDescription, setTaskDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
+  const [currentDate] = useState()
+
+ // console.log(Date.now())
 
   function addTask(e) {
     e.preventDefault();
@@ -19,6 +22,7 @@ export default function Tasks() {
       return alert("Enter a task");
     } else {
       let uniqueId = Date.now();
+      console.log(selectedDate.toDateString())
       let dueDate = selectedDate.toString().substring(4, 21)
       setTasks((prevState) => [
         ...prevState,
@@ -113,7 +117,8 @@ export default function Tasks() {
               </p>
               <p>
                 Due Date: <br />
-                {element.dueDate}
+                {element.dueDate} <br />
+                Time left: {/*new Date()*/}
               </p>
               <span onClick={(e) => deleteTask(element.id)}>
                 <svg
