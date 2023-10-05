@@ -1,11 +1,18 @@
 import React, { useState } from "react";
+import DateTimePicker from "react-datetime-picker";
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [taskTitle, setTaskTitle] = useState();
   const [taskDescription, setTaskDescription] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
+
   function addTask(e) {
     e.preventDefault();
+    console.log(selectedDate)
     if (taskTitle === "" || taskDescription === "") {
       return alert("Enter a task");
     } else {
@@ -16,6 +23,7 @@ export default function Tasks() {
           id: uniqueId,
           taskTitle: taskTitle,
           taskDescription: taskDescription,
+          //dueDate: selectedDate
         },
       ]);
       setTaskTitle("");
@@ -65,6 +73,14 @@ export default function Tasks() {
               onChange={(e) => setTaskDescription(e.target.value)}
               type="text"
             />
+            <br />
+            <p>Due Date</p>
+            <DateTimePicker
+              value={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              minDate={new Date()}
+              
+            />
             <br /> <br />
             <button id="addTaskBtn" onClick={(e) => addTask(e)}>
               Add Task
@@ -76,8 +92,18 @@ export default function Tasks() {
         {tasks.map((element) => {
           return (
             <div className="taskContainer" id={element.id}>
-              <p>Title: <br />{element.taskTitle}</p>
-              <p>Description: <br />{element.taskDescription}</p>
+              <p>
+                Title: <br />
+                {element.taskTitle}
+              </p>
+              <p>
+                Description: <br />
+                {element.taskDescription}
+              </p>
+              <p>
+                Due Date: <br />
+                {element.dueDate}
+              </p>
               <span onClick={(e) => deleteTask(element.id)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
