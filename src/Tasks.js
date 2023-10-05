@@ -12,22 +12,26 @@ export default function Tasks() {
 
   function addTask(e) {
     e.preventDefault();
-    console.log(selectedDate)
+    if (selectedDate === null) {
+      return alert("Enter due date")
+    }
     if (taskTitle === "" || taskDescription === "") {
       return alert("Enter a task");
     } else {
       let uniqueId = Date.now();
+      let dueDate = selectedDate.toString().substring(4, 21)
       setTasks((prevState) => [
         ...prevState,
         {
           id: uniqueId,
           taskTitle: taskTitle,
           taskDescription: taskDescription,
-          //dueDate: selectedDate
+          dueDate: dueDate
         },
       ]);
       setTaskTitle("");
       setTaskDescription("");
+      setSelectedDate(null)
       displayModal(false);
     }
   }
@@ -79,7 +83,14 @@ export default function Tasks() {
               value={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
-              
+              disableClock
+              dayPlaceholder = 'dd'
+              hourPlaceholder = 'hh'
+              minutePlaceholder = 'mm'
+              monthPlaceholder = 'MM'
+              yearPlaceholder = 'yyyy'
+              format="yyyy/MM/dd h:mm a"
+              onInvalidChange = {() => alert('Invalid datetime')}
             />
             <br /> <br />
             <button id="addTaskBtn" onClick={(e) => addTask(e)}>
