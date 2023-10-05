@@ -2,19 +2,25 @@ import React, { useState } from "react";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
-
-  function addTask() {
-    const taskTitle = document.getElementById("taskTitle").value;
-    const taskDescription = document.getElementById("taskDescription").value;
+  const [taskTitle, setTaskTitle] = useState();
+  const [taskDescription, setTaskDescription] = useState();
+  function addTask(e) {
+    e.preventDefault();
     if (taskTitle === "" || taskDescription === "") {
       return alert("Enter a task");
     } else {
       let uniqueId = Date.now();
       setTasks((prevState) => [
         ...prevState,
-        { id: uniqueId, taskTitle: taskTitle, taskDescription: taskDescription },
+        {
+          id: uniqueId,
+          taskTitle: taskTitle,
+          taskDescription: taskDescription,
+        },
       ]);
-      displayModal(false)
+      setTaskTitle("");
+      setTaskDescription("");
+      displayModal(false);
     }
   }
   function deleteTask(id) {
@@ -27,39 +33,51 @@ export default function Tasks() {
     setTasks([...updatedTasks]);
   }
 
-  
-
   function displayModal(display) {
-    var modal = document.getElementById("myModal")
+    var modal = document.getElementById("myModal");
     if (display === true) {
-      modal.style.display = "block"
-    }
-    else {
-      modal.style.display = "none"
+      modal.style.display = "block";
+    } else {
+      modal.style.display = "none";
     }
   }
-
-  
-
   return (
     <div>
       <button onClick={(e) => displayModal(true)}>New Task</button>
       <div id="myModal" class="modal">
         <div class="modal-content">
-          <span onClick={(e) => displayModal(false)} class="close">&times;</span>
-          <p>Title</p>
-          <input id="taskTitle" type="text" />
-          <p>Description</p>
-          <input id="taskDescription" type="text" /> <br /> <br />
-          <button id="addTaskBtn"  onClick={(e) => addTask()}>Add Task</button>
+          <span onClick={(e) => displayModal(false)} class="close">
+            &times;
+          </span>
+          <form onSubmit="return false">
+            <label>Title</label>
+            <br />
+            <input
+              value={taskTitle}
+              onChange={(e) => setTaskTitle(e.target.value)}
+              type="text"
+            />
+            <br />
+            <label>Description</label>
+            <br />
+            <input
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              type="text"
+            />
+            <br /> <br />
+            <button id="addTaskBtn" onClick={(e) => addTask(e)}>
+              Add Task
+            </button>
+          </form>
         </div>
       </div>
       <div>
         {tasks.map((element) => {
           return (
-            <div id={element.id}>
-              {element.taskTitle}
-              {element.taskDescription}
+            <div className="taskContainer" id={element.id}>
+              <p>Title: <br />{element.taskTitle}</p>
+              <p>Description: <br />{element.taskDescription}</p>
               <span onClick={(e) => deleteTask(element.id)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
