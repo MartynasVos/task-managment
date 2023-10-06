@@ -1,41 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateTimePicker from "react-datetime-picker";
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [taskTitle, setTaskTitle] = useState();
   const [taskDescription, setTaskDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
-  const [currentDate] = useState()
 
- // console.log(Date.now())
+  useEffect(() => {
+    if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
+       setTasks(JSON.parse(localStorage.tasks))
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }, [tasks])
 
   function addTask(e) {
     e.preventDefault();
     if (selectedDate === null) {
-      return alert("Enter due date")
+      return alert("Enter due date");
     }
     if (taskTitle === "" || taskDescription === "") {
       return alert("Enter a task");
     } else {
       let uniqueId = Date.now();
-      console.log(selectedDate.toDateString())
-      let dueDate = selectedDate.toString().substring(4, 21)
+      let dueDate = selectedDate.toString().substring(4, 21);
       setTasks((prevState) => [
         ...prevState,
         {
           id: uniqueId,
           taskTitle: taskTitle,
           taskDescription: taskDescription,
-          dueDate: dueDate
+          dueDate: dueDate,
         },
       ]);
       setTaskTitle("");
       setTaskDescription("");
-      setSelectedDate(null)
+      setSelectedDate(null);
       displayModal(false);
     }
   }
@@ -47,6 +50,7 @@ export default function Tasks() {
       }
     });
     setTasks([...updatedTasks]);
+    localStorage.setItem("tasks", JSON.stringify(tasks))
   }
 
   function displayModal(display) {
@@ -59,6 +63,7 @@ export default function Tasks() {
   }
   return (
     <div>
+      <div>Current date{Date()}</div>
       <button onClick={(e) => displayModal(true)}>New Task</button>
       <div id="myModal" class="modal">
         <div class="modal-content">
@@ -88,13 +93,13 @@ export default function Tasks() {
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
               disableClock
-              dayPlaceholder = 'dd'
-              hourPlaceholder = 'hh'
-              minutePlaceholder = 'mm'
-              monthPlaceholder = 'MM'
-              yearPlaceholder = 'yyyy'
+              dayPlaceholder="dd"
+              hourPlaceholder="hh"
+              minutePlaceholder="mm"
+              monthPlaceholder="MM"
+              yearPlaceholder="yyyy"
               format="yyyy/MM/dd h:mm a"
-              onInvalidChange = {() => alert('Invalid datetime')}
+              onInvalidChange={() => alert("Invalid datetime")}
             />
             <br /> <br />
             <button id="addTaskBtn" onClick={(e) => addTask(e)}>
@@ -117,8 +122,7 @@ export default function Tasks() {
               </p>
               <p>
                 Due Date: <br />
-                {element.dueDate} <br />
-                Time left: {/*new Date()*/}
+                {element.dueDate}{" "}
               </p>
               <span onClick={(e) => deleteTask(element.id)}>
                 <svg

@@ -1,10 +1,12 @@
 import Tasks from "./Tasks";
-import "./css/styles.css"
+import "./css/styles.css";
+import Clock from "./Clock";
 
 function App() {
   return (
     <div className="App">
-          <Tasks />
+      <Clock />
+      <Tasks />
     </div>
   );
 }
