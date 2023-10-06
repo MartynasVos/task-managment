@@ -10,6 +10,38 @@ export default function Tasks() {
   const [taskDescription, setTaskDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
 
+
+
+  let time = new Date().toLocaleTimeString()
+  let date = new Date().toDateString()
+  const [currentTime, setCurrentTime] = useState(time)
+  const [currentDay, setCurrentDay] = useState(date)
+
+  function updateClock() {
+      setCurrentTime(new Date().toLocaleTimeString())
+      setCurrentDay(new Date().toDateString())
+  }
+
+  setInterval(updateClock, 1000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
        setTasks(JSON.parse(localStorage.tasks))
@@ -63,7 +95,7 @@ export default function Tasks() {
   }
   return (
     <div>
-      <div>Current date{Date()}</div>
+      <div></div>
       <button onClick={(e) => displayModal(true)}>New Task</button>
       <div id="myModal" class="modal">
         <div class="modal-content">
@@ -141,6 +173,10 @@ export default function Tasks() {
           );
         })}
       </div>
+      <div>
+        {currentDay} <br />
+        {currentTime}
+    </div>
     </div>
   );
 }
