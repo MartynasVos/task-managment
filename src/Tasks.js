@@ -101,11 +101,11 @@ export default function Tasks() {
 
   function addTask(e) {
     e.preventDefault();
-    if (selectedDate === null) {
-      return alert("Enter due date");
-    }
     if (taskTitle === "" || taskDescription === "") {
       return alert("Enter a task");
+    }
+    if (selectedDate === null) {
+      return alert("Enter due date");
     } else {
       let uniqueId = Date.now();
       console.log(selectedDate);
@@ -123,7 +123,7 @@ export default function Tasks() {
       setTaskTitle("");
       setTaskDescription("");
       setSelectedDate(null);
-      displayModal(false);
+      displayTaskModal(false);
     }
   }
   function deleteTask(id) {
@@ -136,25 +136,40 @@ export default function Tasks() {
     setTasks([...updatedTasks]);
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
-  function editTask(id) {
-    displayModal(true)
+  
+  function editTask(e, id) {
+    e.preventDefault()
+    
   }
 
-  function displayModal(display) {
-    var modal = document.getElementById("myModal");
+  function displayTaskModal(display, add, id) {
+    var taskModal = document.getElementById("taskModal");
     if (display === true) {
-      modal.style.display = "block";
+      taskModal.style.display = "block";
     } else {
-      modal.style.display = "none";
+      taskModal.style.display = "none";
+      return
     }
+
+    const taskBtn = document.getElementById('taskBtn')
+    if (add) {
+      taskBtn.innerHTML = "Add Task"
+      taskBtn.onclick = (e) => addTask(e)
+    } else {
+      taskBtn.innerHTML = "Edit Task"
+      const task = document.getElementById(id)
+      setTaskTitle(task.querySelector('.taskTitle').innerHTML)
+      setTaskDescription(task.querySelector('.taskDescription').innerHTML)
+      taskBtn.onclick = (e) => editTask(e, id)
+    }
+    
   }
   return (
     <div>
-      <div></div>
-      <button onClick={(e) => displayModal(true)}>New Task</button>
-      <div id="myModal" class="modal">
+      <button onClick={(e) => displayTaskModal(true, true)}>New Task</button>
+      <div id="taskModal" className="modal">
         <div class="modal-content">
-          <span onClick={(e) => displayModal(false)} class="close">
+          <span onClick={(e) => displayTaskModal(false)} class="close">
             &times;
           </span>
           <form onSubmit="return false">
@@ -188,7 +203,7 @@ export default function Tasks() {
               format="yyyy/MM/dd HH:mm"
             />
             <br /> <br />
-            <button id="addTaskBtn" onClick={(e) => addTask(e)}>
+            <button id="taskBtn">
               Add Task
             </button>
           </form>
@@ -198,19 +213,19 @@ export default function Tasks() {
         {tasks.map((element) => {
           return (
             <div className="taskContainer" id={element.id}>
-              <p>
-                Title: <br />
-                {element.taskTitle}
-              </p>
-              <p>
-                Description: <br />
-                {element.taskDescription}
-              </p>
-              <p>
-                Due Date: <br />
+              <div>
+                <p>Title:</p>
+                <p className="taskTitle">{element.taskTitle}</p>
+              </div>
+              <div>
+                <p>Description:</p>
+                <p className="taskDescription">{element.taskDescription}</p>
+              </div>
+              <div>
+                <p>Due Date:</p>
                 {element.dueDate} <br />
                 Time left: {timeLeft(element.dueDate)}
-              </p>
+              </div>
               <svg
                 onClick={(e) => deleteTask(element.id)}
                 xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +239,7 @@ export default function Tasks() {
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
               </svg>
               <svg
-                onClick={(e) => editTask(element.id)}
+                onClick={(e) => displayTaskModal(true, false, element.id)}
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
