@@ -9,7 +9,13 @@ export default function Tasks() {
   const [taskTitle, setTaskTitle] = useState();
   const [taskDescription, setTaskDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
-  const [editTaskId, setEditTaskId] = useState()
+  const [editTaskId, setEditTaskId] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
+
+  const [categories, setCategories] = useState([
+    <option value="work">Work</option>,
+    <option value="personal">Personal</option>,
+  ]);
 
   let time = new Date().toLocaleTimeString();
   let date = new Date().toDateString();
@@ -110,7 +116,7 @@ export default function Tasks() {
     } else {
       let uniqueId = Date.now();
       let dueDate = selectedDate.toString().substring(4, 21);
-
+      console.log(selectedCategory)
       setTasks((prevState) => [
         ...prevState,
         {
@@ -136,16 +142,16 @@ export default function Tasks() {
     setTasks([...updatedTasks]);
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
-  
+
   function editTask(e) {
-    e.preventDefault()
-    const task = tasks.find(({id}) => id === editTaskId)
-    task.taskTitle = taskTitle
-    task.taskDescription = taskDescription
+    e.preventDefault();
+    const task = tasks.find(({ id }) => id === editTaskId);
+    task.taskTitle = taskTitle;
+    task.taskDescription = taskDescription;
     if (selectedDate.toString().length > 20) {
-      task.dueDate = selectedDate.toString().substring(4, 21)
+      task.dueDate = selectedDate.toString().substring(4, 21);
     }
-    displayEditTaskModal(false)
+    displayEditTaskModal(false);
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
@@ -155,16 +161,16 @@ export default function Tasks() {
       editTaskModal.style.display = "block";
     } else {
       editTaskModal.style.display = "none";
-      setTaskTitle("")
-      setTaskDescription("")
-      setSelectedDate(null)
-      return
+      setTaskTitle("");
+      setTaskDescription("");
+      setSelectedDate(null);
+      return;
     }
-    const task = tasks.find(({id}) => id === curId)
-    setTaskTitle(task.taskTitle)
-    setTaskDescription(task.taskDescription)
-    setSelectedDate(task.dueDate)
-    setEditTaskId(curId)
+    const task = tasks.find(({ id }) => id === curId);
+    setTaskTitle(task.taskTitle);
+    setTaskDescription(task.taskDescription);
+    setSelectedDate(task.dueDate);
+    setEditTaskId(curId);
   }
   function displayAddTaskModal(display) {
     var addTaskModal = document.getElementById("addTaskModal");
@@ -172,7 +178,7 @@ export default function Tasks() {
       addTaskModal.style.display = "block";
     } else {
       addTaskModal.style.display = "none";
-      return
+      return;
     }
   }
   return (
@@ -214,9 +220,19 @@ export default function Tasks() {
               format="yyyy/MM/dd HH:mm"
             />
             <br /> <br />
-            <button onClick={(e) => addTask(e)}>
-              Add Task
-            </button>
+            <label>Category: </label>
+            <select
+              name=""
+              id=""
+              value={selectedCategory}
+              onChange={(selected) => setSelectedCategory(selected)}
+            >
+              {categories.map((element) => {
+                return element;
+              })}
+            </select>
+            <br /> <br />
+            <button onClick={(e) => addTask(e)}>Add Task</button>
           </form>
         </div>
       </div>
@@ -256,9 +272,7 @@ export default function Tasks() {
               format="yyyy/MM/dd HH:mm"
             />
             <br /> <br />
-            <button onClick={(e) => editTask(e)}>
-              Edit Task
-            </button>
+            <button onClick={(e) => editTask(e)}>Edit Task</button>
           </form>
         </div>
       </div>
