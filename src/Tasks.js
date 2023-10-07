@@ -9,6 +9,7 @@ export default function Tasks() {
   const [taskTitle, setTaskTitle] = useState();
   const [taskDescription, setTaskDescription] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
+  const [editTaskId, setEditTaskId] = useState()
 
   let time = new Date().toLocaleTimeString();
   let date = new Date().toDateString();
@@ -108,7 +109,6 @@ export default function Tasks() {
       return alert("Enter due date");
     } else {
       let uniqueId = Date.now();
-      console.log(selectedDate);
       let dueDate = selectedDate.toString().substring(4, 21);
 
       setTasks((prevState) => [
@@ -123,7 +123,7 @@ export default function Tasks() {
       setTaskTitle("");
       setTaskDescription("");
       setSelectedDate(null);
-      displayTaskModal(false);
+      displayAddTaskModal(false);
     }
   }
   function deleteTask(id) {
@@ -137,39 +137,50 @@ export default function Tasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
   
-  function editTask(e, id) {
+  function editTask(e) {
     e.preventDefault()
-    
+    const task = tasks.find(({id}) => id === editTaskId)
+    task.taskTitle = taskTitle
+    task.taskDescription = taskDescription
+    if (selectedDate.toString().length > 20) {
+      task.dueDate = selectedDate.toString().substring(4, 21)
+    }
+    displayEditTaskModal(false)
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
-  function displayTaskModal(display, add, id) {
-    var taskModal = document.getElementById("taskModal");
+  function displayEditTaskModal(display, curId) {
+    var editTaskModal = document.getElementById("editTaskModal");
     if (display === true) {
-      taskModal.style.display = "block";
+      editTaskModal.style.display = "block";
     } else {
-      taskModal.style.display = "none";
+      editTaskModal.style.display = "none";
+      setTaskTitle("")
+      setTaskDescription("")
+      setSelectedDate(null)
       return
     }
-
-    const taskBtn = document.getElementById('taskBtn')
-    if (add) {
-      taskBtn.innerHTML = "Add Task"
-      taskBtn.onclick = (e) => addTask(e)
+    const task = tasks.find(({id}) => id === curId)
+    setTaskTitle(task.taskTitle)
+    setTaskDescription(task.taskDescription)
+    setSelectedDate(task.dueDate)
+    setEditTaskId(curId)
+  }
+  function displayAddTaskModal(display) {
+    var addTaskModal = document.getElementById("addTaskModal");
+    if (display === true) {
+      addTaskModal.style.display = "block";
     } else {
-      taskBtn.innerHTML = "Edit Task"
-      const task = document.getElementById(id)
-      setTaskTitle(task.querySelector('.taskTitle').innerHTML)
-      setTaskDescription(task.querySelector('.taskDescription').innerHTML)
-      taskBtn.onclick = (e) => editTask(e, id)
+      addTaskModal.style.display = "none";
+      return
     }
-    
   }
   return (
     <div>
-      <button onClick={(e) => displayTaskModal(true, true)}>New Task</button>
-      <div id="taskModal" className="modal">
+      <button onClick={() => displayAddTaskModal(true)}>New Task</button>
+      <div id="addTaskModal" className="modal">
         <div class="modal-content">
-          <span onClick={(e) => displayTaskModal(false)} class="close">
+          <span onClick={() => displayAddTaskModal(false)} class="close">
             &times;
           </span>
           <form onSubmit="return false">
@@ -203,8 +214,50 @@ export default function Tasks() {
               format="yyyy/MM/dd HH:mm"
             />
             <br /> <br />
-            <button id="taskBtn">
+            <button onClick={(e) => addTask(e)}>
               Add Task
+            </button>
+          </form>
+        </div>
+      </div>
+      <div id="editTaskModal" className="modal">
+        <div class="modal-content">
+          <span onClick={() => displayEditTaskModal(false)} class="close">
+            &times;
+          </span>
+          <form onSubmit="return false">
+            <label>Title</label>
+            <br />
+            <input
+              value={taskTitle}
+              onChange={(e) => setTaskTitle(e.target.value)}
+              type="text"
+            />
+            <br />
+            <label>Description</label>
+            <br />
+            <input
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              type="text"
+            />
+            <br />
+            <p>Due Date</p>
+            <DateTimePicker
+              value={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              minDate={new Date()}
+              disableClock
+              dayPlaceholder="dd"
+              hourPlaceholder="hh"
+              minutePlaceholder="mm"
+              monthPlaceholder="MM"
+              yearPlaceholder="yyyy"
+              format="yyyy/MM/dd HH:mm"
+            />
+            <br /> <br />
+            <button onClick={(e) => editTask(e)}>
+              Edit Task
             </button>
           </form>
         </div>
@@ -239,7 +292,7 @@ export default function Tasks() {
                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
               </svg>
               <svg
-                onClick={(e) => displayTaskModal(true, false, element.id)}
+                onClick={() => displayEditTaskModal(true, element.id)}
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
