@@ -24,7 +24,6 @@ export default function CreateTask({
     } else {
       let uniqueId = Date.now();
       let dueDate = selectedDate.toString().substring(4, 21);
-      console.log(selectedCategory)
       setTasks((prevState) => [
         ...prevState,
         {
@@ -100,7 +99,7 @@ export default function CreateTask({
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
               {categories.map((element) => {
-                return element;
+                return <option value={element}>{element}</option>;
               })}
             </select>
             <br /> <br />

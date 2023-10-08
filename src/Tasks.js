@@ -6,6 +6,7 @@ import "react-clock/dist/Clock.css";
 import TasksList from "./components/TasksList";
 import CreateTask from "./components/CreateTask";
 import EditTask from "./components/EditTask";
+import EditCategories from "./components/EditCategories";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -14,11 +15,10 @@ export default function Tasks() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [editTaskId, setEditTaskId] = useState("");
 
-  const [categories, setCategories] = useState([
-    <option value="work">Work</option>,
-    <option value="personal">Personal</option>,
-  ]);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0].props.value);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(
+    'ok'
+  );
 
   let time = new Date().toLocaleTimeString();
   let date = new Date().toDateString();
@@ -42,6 +42,15 @@ export default function Tasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  useEffect(() => {
+      if (categories.length === 0 && JSON.parse(localStorage.categories).length !== 0) {
+        setCategories(JSON.parse(localStorage.categories));
+      }
+    
+    localStorage.setItem("categories", JSON.stringify(categories));
+    console.log(JSON.parse(localStorage.categories))
+  }, [categories]);
+
   function displayEditTaskModal(display, curId) {
     var editTaskModal = document.getElementById("editTaskModal");
     if (display === true) {
@@ -57,6 +66,7 @@ export default function Tasks() {
     setTaskTitle(task.taskTitle);
     setTaskDescription(task.taskDescription);
     setSelectedDate(task.dueDate);
+    setSelectedCategory(task.category);
     setEditTaskId(curId);
   }
 
@@ -75,6 +85,7 @@ export default function Tasks() {
         categories={categories}
         setTasks={setTasks}
       />
+      <EditCategories categories={categories} setCategories={setCategories} />
       <EditTask
         displayEditTaskModal={displayEditTaskModal}
         taskTitle={taskTitle}
@@ -84,6 +95,9 @@ export default function Tasks() {
         DateTimePicker={DateTimePicker}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
         tasks={tasks}
         editTaskId={editTaskId}
       />

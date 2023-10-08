@@ -71,13 +71,12 @@ export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
     return Math.floor(secondsLeft) + " Seconds left";
   }
   function deleteTask(id) {
-    const updatedTasks = tasks;
-    updatedTasks.forEach((element) => {
+   tasks.forEach((element) => {
       if (element.id === id) {
-        updatedTasks.splice(updatedTasks.indexOf(element), 1);
+        tasks.splice(tasks.indexOf(element), 1);
       }
     });
-    setTasks([...updatedTasks]);
+    setTasks([...tasks]);
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
   return (

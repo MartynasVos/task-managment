@@ -8,20 +8,24 @@ export default function EditTask({
   DateTimePicker,
   selectedDate,
   setSelectedDate,
+  selectedCategory,
+  setSelectedCategory,
+  categories,
   tasks,
   editTaskId
 }) {
 
   function editTask(e) {
-    e.preventDefault();
-    const task = tasks.find(({ id }) => id === editTaskId);
-    task.taskTitle = taskTitle;
-    task.taskDescription = taskDescription;
+    e.preventDefault()
+    const task = tasks.find(({ id }) => id === editTaskId)
+    task.taskTitle = taskTitle
+    task.taskDescription = taskDescription
     if (selectedDate.toString().length > 20) {
-      task.dueDate = selectedDate.toString().substring(4, 21);
+      task.dueDate = selectedDate.toString().substring(4, 21)
     }
-    displayEditTaskModal(false);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    task.category = selectedCategory
+    displayEditTaskModal(false)
+    localStorage.setItem("tasks", JSON.stringify(tasks))
   }
 
   
@@ -62,6 +66,18 @@ export default function EditTask({
             format="yyyy/MM/dd HH:mm"
           />
           <br /> <br />
+          <label>Category: </label>
+          <select
+              name=""
+              id=""
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              {categories.map((element) => {
+                return <option value={element}>{element}</option>;
+              })}
+            </select>
+            <br /> <br />
           <button onClick={(e) => editTask(e)}>Edit Task</button>
         </form>
       </div>
