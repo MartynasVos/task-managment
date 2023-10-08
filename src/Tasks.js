@@ -15,10 +15,12 @@ export default function Tasks() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [editTaskId, setEditTaskId] = useState("");
 
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(
-    'ok'
+  const [categories, setCategories] = useState(() =>
+    JSON.parse(localStorage.categories)
   );
+  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+  const [currentCategory, setCurrentCategory] = useState("all");
 
   let time = new Date().toLocaleTimeString();
   let date = new Date().toDateString();
@@ -33,22 +35,15 @@ export default function Tasks() {
   setInterval(updateClock, 1000);
 
   useEffect(() => {
-    if (localStorage.tasks !== undefined) {
-      if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
-        setTasks(JSON.parse(localStorage.tasks));
-      }
+    if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
+      setTasks(JSON.parse(localStorage.tasks));
     }
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   useEffect(() => {
-      if (categories.length === 0 && JSON.parse(localStorage.categories).length !== 0) {
-        setCategories(JSON.parse(localStorage.categories));
-      }
-    
     localStorage.setItem("categories", JSON.stringify(categories));
-    console.log(JSON.parse(localStorage.categories))
   }, [categories]);
 
   function displayEditTaskModal(display, curId) {
@@ -86,6 +81,17 @@ export default function Tasks() {
         setTasks={setTasks}
       />
       <EditCategories categories={categories} setCategories={setCategories} />
+      <select
+        name=""
+        id=""
+        value={currentCategory}
+        onChange={(e) => setCurrentCategory(e.target.value)}
+      >
+        <option value="all">All</option>
+        {categories.map((element) => {
+          return <option value={element}>{element}</option>;
+        })}
+      </select>
       <EditTask
         displayEditTaskModal={displayEditTaskModal}
         taskTitle={taskTitle}
@@ -105,6 +111,7 @@ export default function Tasks() {
         tasks={tasks}
         setTasks={setTasks}
         displayEditTaskModal={displayEditTaskModal}
+        currentCategory={currentCategory}
       />
       <div>
         {currentDate} <br />

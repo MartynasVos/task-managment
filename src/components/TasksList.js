@@ -1,6 +1,11 @@
-import React from 'react'
+import React from "react";
 
-export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
+export default function TasksList({
+  tasks,
+  setTasks,
+  displayEditTaskModal,
+  currentCategory,
+}) {
   function timeLeft(dueTime) {
     let yearsLeft = 0;
     const msLeft = new Date(dueTime) - new Date();
@@ -71,7 +76,7 @@ export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
     return Math.floor(secondsLeft) + " Seconds left";
   }
   function deleteTask(id) {
-   tasks.forEach((element) => {
+    tasks.forEach((element) => {
       if (element.id === id) {
         tasks.splice(tasks.indexOf(element), 1);
       }
@@ -81,7 +86,14 @@ export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
   }
   return (
     <div>
-        {tasks.map((element) => {
+      {tasks
+        .filter((element) => {
+          if (element.category !== currentCategory && currentCategory !== "all") {
+            return false
+          }
+          return element
+        })
+        .map((element) => {
           return (
             <div className="taskContainer" id={element.id}>
               <div>
@@ -98,7 +110,7 @@ export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
                 Time left: {timeLeft(element.dueDate)}
               </div>
               <div>
-                <p className='category'>Category: {element.category}</p>
+                <p className="category">Category: {element.category}</p>
               </div>
               <svg
                 onClick={(e) => deleteTask(element.id)}
@@ -122,13 +134,11 @@ export default function TasksList({ tasks, setTasks, displayEditTaskModal }) {
                 viewBox="0 0 16 16"
               >
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                <path
-                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-                />
+                <path d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
               </svg>
             </div>
           );
         })}
-      </div>
-  )
+    </div>
+  );
 }

@@ -24,6 +24,9 @@ export default function EditCategories({ categories, setCategories }) {
   }
 
   function deleteCategory(value) {
+    if (categories.length === 1) {
+      return alert("You must have at least one category")
+    }
     categories.forEach((element) => {
       if (element === value) {
         categories.splice(categories.indexOf(element), 1);
