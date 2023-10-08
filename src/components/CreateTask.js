@@ -1,8 +1,6 @@
 import React from "react";
 
 export default function CreateTask({
-  displayAddTaskModal,
-  addTask,
   taskTitle,
   taskDescription,
   setTaskTitle,
@@ -12,14 +10,55 @@ export default function CreateTask({
   setSelectedDate,
   selectedCategory,
   setSelectedCategory,
-  categories
+  categories,
+  setTasks
 }) {
+
+  function addTask(e) {
+    e.preventDefault();
+    if (taskTitle === "" || taskDescription === "") {
+      return alert("Enter a task");
+    }
+    if (selectedDate === null) {
+      return alert("Enter due date");
+    } else {
+      let uniqueId = Date.now();
+      let dueDate = selectedDate.toString().substring(4, 21);
+      console.log(selectedCategory)
+      setTasks((prevState) => [
+        ...prevState,
+        {
+          id: uniqueId,
+          taskTitle: taskTitle,
+          taskDescription: taskDescription,
+          dueDate: dueDate,
+          category: selectedCategory
+        },
+      ]);
+      
+      setTaskTitle("");
+      setTaskDescription("");
+      setSelectedDate(null);
+      displayAddTaskModal(false);
+    }
+  }
+
+  function displayAddTaskModal(display) {
+    var addTaskModal = document.getElementById("addTaskModal");
+    if (display === true) {
+      addTaskModal.style.display = "block";
+    } else {
+      addTaskModal.style.display = "none";
+      return;
+    }
+  }
+
   return (
     <div>
       <button onClick={() => displayAddTaskModal(true)}>New Task</button>
       <div id="addTaskModal" className="modal">
-        <div class="modal-content">
-          <span onClick={() => displayAddTaskModal(false)} class="close">
+        <div className="modal-content">
+          <span onClick={() => displayAddTaskModal(false)} className="close">
             &times;
           </span>
           <form onSubmit="return false">
@@ -58,7 +97,7 @@ export default function CreateTask({
               name=""
               id=""
               value={selectedCategory}
-              onChange={(selected) => setSelectedCategory(selected)}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
               {categories.map((element) => {
                 return element;

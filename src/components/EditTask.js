@@ -1,20 +1,34 @@
-import React from "react";
 
 export default function EditTask({
   displayEditTaskModal,
-  editTask,
   taskTitle,
   taskDescription,
   setTaskTitle,
   setTaskDescription,
   DateTimePicker,
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
+  tasks,
+  editTaskId
 }) {
+
+  function editTask(e) {
+    e.preventDefault();
+    const task = tasks.find(({ id }) => id === editTaskId);
+    task.taskTitle = taskTitle;
+    task.taskDescription = taskDescription;
+    if (selectedDate.toString().length > 20) {
+      task.dueDate = selectedDate.toString().substring(4, 21);
+    }
+    displayEditTaskModal(false);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  
   return (
     <div id="editTaskModal" className="modal">
-      <div class="modal-content">
-        <span onClick={() => displayEditTaskModal(false)} class="close">
+      <div className="modal-content">
+        <span onClick={() => displayEditTaskModal(false)} className="close">
           &times;
         </span>
         <form onSubmit="return false">
