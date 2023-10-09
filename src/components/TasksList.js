@@ -5,6 +5,8 @@ export default function TasksList({
   setTasks,
   displayEditTaskModal,
   currentCategory,
+  searchInput,
+  searchType,
 }) {
   function timeLeft(dueTime) {
     let yearsLeft = 0;
@@ -84,11 +86,34 @@ export default function TasksList({
     setTasks([...tasks]);
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }
-  
+
+  const filteredTasks = tasks.filter((element) => {
+    if (searchType === "title") {
+      if (element.taskTitle.toLowerCase().includes(searchInput.toLowerCase())) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+    if (searchType === "description") {
+      if (element.taskDescription.toLowerCase().includes(searchInput.toLowerCase())) {
+        return 1
+      } else {
+        return 0
+      }
+    }
+    if (
+      element.taskTitle.toLowerCase().includes(searchInput.toLowerCase()) ||
+      element.taskDescription.toLowerCase().includes(searchInput.toLowerCase())
+    ) {
+      return 1;
+    }
+    return 0;
+  });
+
   return (
     <div>
-      
-      {tasks
+      {filteredTasks
         .filter((element) => {
           if (
             element.category !== currentCategory &&

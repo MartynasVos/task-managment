@@ -11,10 +11,13 @@ import SortTasks from "./components/SortTasks";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
+  const [searchInput, setSearchInput] = useState("")
+  const [searchType, setSearchType] = useState("")
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [editTaskId, setEditTaskId] = useState("");
+
 
   const [categories, setCategories] = useState(() =>
   localStorage.categories === undefined ? ['Personal', 'Work'] : JSON.parse(localStorage.categories)
@@ -109,12 +112,20 @@ export default function Tasks() {
         tasks={tasks}
         editTaskId={editTaskId}
       />
+      <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} type="text" />
+      <select onChange={(e) => setSearchType(e.target.value)} name="" id="">
+        <option value="everywhere">Everywhere</option>
+        <option value="title">Title</option>
+        <option value="description">Description</option>
+      </select>
       <SortTasks tasks={tasks} />
       <TasksList
         tasks={tasks}
         setTasks={setTasks}
         displayEditTaskModal={displayEditTaskModal}
         currentCategory={currentCategory}
+        searchInput={searchInput}
+        searchType={searchType}
       />
       <div>
         {currentDate} <br />
