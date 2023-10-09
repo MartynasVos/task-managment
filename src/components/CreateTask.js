@@ -11,9 +11,8 @@ export default function CreateTask({
   selectedCategory,
   setSelectedCategory,
   categories,
-  setTasks
+  setTasks,
 }) {
-
   function addTask(e) {
     e.preventDefault();
     if (taskTitle === "" || taskDescription === "") {
@@ -31,10 +30,10 @@ export default function CreateTask({
           taskTitle: taskTitle,
           taskDescription: taskDescription,
           dueDate: dueDate,
-          category: selectedCategory
+          category: selectedCategory,
         },
       ]);
-      
+
       setTaskTitle("");
       setTaskDescription("");
       setSelectedDate(null);

@@ -1,7 +1,12 @@
-* {
+html, body {
   margin: 0;
 }
 
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto; 
+}
 
 .trash:hover {
   color: red;
@@ -64,6 +69,6 @@
 }
 
 .taskContainer > p {
-    max-width: 200px;
-    overflow-wrap: break-word;
+  max-width: 200px;
+  overflow-wrap: break-word;
 }

@@ -11,16 +11,17 @@ import SortTasks from "./components/SortTasks";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
-  const [searchInput, setSearchInput] = useState("")
-  const [searchType, setSearchType] = useState("")
+  const [searchInput, setSearchInput] = useState("");
+  const [searchType, setSearchType] = useState("");
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [editTaskId, setEditTaskId] = useState("");
 
-
   const [categories, setCategories] = useState(() =>
-  localStorage.categories === undefined ? ['Personal', 'Work'] : JSON.parse(localStorage.categories)
+    localStorage.categories === undefined
+      ? ["Personal", "Work"]
+      : JSON.parse(localStorage.categories)
   );
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
@@ -71,7 +72,7 @@ export default function Tasks() {
   }
 
   return (
-    <div>
+    <div className="container">
       <CreateTask
         taskTitle={taskTitle}
         taskDescription={taskDescription}
@@ -112,7 +113,11 @@ export default function Tasks() {
         tasks={tasks}
         editTaskId={editTaskId}
       />
-      <input value={searchInput} onChange={(e) => setSearchInput(e.target.value)} type="text" />
+      <input
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        type="text"
+      />
       <select onChange={(e) => setSearchType(e.target.value)} name="" id="">
         <option value="everywhere">Everywhere</option>
         <option value="title">Title</option>
