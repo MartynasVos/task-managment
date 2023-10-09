@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-export default function EditCategories({ categories, setCategories }) {
+export default function EditCategories({
+  categories,
+  setCategories,
+  setSelectedCategory,
+  tasks,
+  setTasks,
+}) {
   const [newCategory, setNewCategory] = useState("");
 
   function displayEditCategoriesModal(display) {
@@ -18,7 +24,11 @@ export default function EditCategories({ categories, setCategories }) {
     if (newCategory === "") {
       return alert("Enter a category");
     }
-    if (categories.includes(newCategory)) {
+    if (
+      categories.some(
+        (element) => element.toLowerCase() === newCategory.toLowerCase()
+      )
+    ) {
       return alert("Category already exists");
     }
     setCategories((prevState) => [...prevState, newCategory]);
@@ -29,6 +39,16 @@ export default function EditCategories({ categories, setCategories }) {
     if (categories.length === 1) {
       return alert("You must have at least one category");
     }
+    if (tasks.some((element) => element.category === value)) {
+      if (window.confirm("Delete all tasks with this category") === true) {
+        const updatedTasks = tasks.filter((element) => {
+          return element.category !== value;
+        });
+        return setTasks(updatedTasks);
+      } else {
+        return 0;
+      }
+    }
     categories.forEach((element) => {
       if (element === value) {
         categories.splice(categories.indexOf(element), 1);
@@ -36,6 +56,7 @@ export default function EditCategories({ categories, setCategories }) {
     });
     setCategories([...categories]);
     localStorage.setItem("categories", JSON.stringify(categories));
+    setSelectedCategory(categories[0]);
   }
 
   return (
@@ -51,15 +72,17 @@ export default function EditCategories({ categories, setCategories }) {
           >
             &times;
           </span>
-          <input
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            type="text"
-          />
-          <button onClick={() => addNewCategory()}>Add Category</button>
+          <div className="flex-container">
+            <input
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              type="text"
+            />
+            <button onClick={() => addNewCategory()}>Add Category</button>
+          </div>
           {categories.map((element) => {
             return (
-              <div>
+              <div className="flex-container">
                 <p>{element}</p>
                 <svg
                   onClick={(e) => deleteCategory(element)}

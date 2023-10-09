@@ -86,18 +86,21 @@ export default function Tasks() {
         categories={categories}
         setTasks={setTasks}
       />
-      <EditCategories categories={categories} setCategories={setCategories} />
-      <select
-        name=""
-        id=""
-        value={currentCategory}
-        onChange={(e) => setCurrentCategory(e.target.value)}
-      >
-        <option value="All">All</option>
-        {categories.map((element) => {
-          return <option value={element}>{element}</option>;
-        })}
-      </select>
+      <div className="flex-container">
+      <EditCategories categories={categories} setCategories={setCategories} setSelectedCategory={setSelectedCategory} tasks={tasks} setTasks={setTasks} />
+        <p>Select Category</p>
+        <select
+          name=""
+          id=""
+          value={currentCategory}
+          onChange={(e) => setCurrentCategory(e.target.value)}
+        >
+          <option value="All">All</option>
+          {categories.map((element) => {
+            return <option value={element}>{element}</option>;
+          })}
+        </select>
+      </div>
       <EditTask
         displayEditTaskModal={displayEditTaskModal}
         taskTitle={taskTitle}

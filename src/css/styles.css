@@ -1,11 +1,16 @@
-html, body {
+* {
   margin: 0;
 }
 
 .container {
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto; 
+  max-width: 1000px;
+  margin: 50px auto; 
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
 }
 
 .trash:hover {
@@ -30,7 +35,12 @@ html, body {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 100%;
+  max-width: 400px;
+}
+
+.modal-content > .flex-container {
+  margin-bottom: 20px;
 }
 
 .close {
