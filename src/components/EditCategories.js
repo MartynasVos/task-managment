@@ -19,6 +19,9 @@ export default function EditCategories({ categories, setCategories }) {
     if (newCategory === "") {
       return alert("Enter a category")
     }
+    if (categories.includes(newCategory)) {
+      return alert("Category already exists")
+    }
     setCategories((prevState) => [...prevState, newCategory]);
     setNewCategory('')
   }

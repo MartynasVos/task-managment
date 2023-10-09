@@ -7,6 +7,7 @@ import TasksList from "./components/TasksList";
 import CreateTask from "./components/CreateTask";
 import EditTask from "./components/EditTask";
 import EditCategories from "./components/EditCategories";
+import SortTasks from "./components/SortTasks";
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -16,11 +17,11 @@ export default function Tasks() {
   const [editTaskId, setEditTaskId] = useState("");
 
   const [categories, setCategories] = useState(() =>
-    JSON.parse(localStorage.categories)
+  localStorage.categories === undefined ? ['Personal', 'Work'] : JSON.parse(localStorage.categories)
   );
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 
-  const [currentCategory, setCurrentCategory] = useState("all");
+  const [currentCategory, setCurrentCategory] = useState("All");
 
   let time = new Date().toLocaleTimeString();
   let date = new Date().toDateString();
@@ -35,10 +36,11 @@ export default function Tasks() {
   setInterval(updateClock, 1000);
 
   useEffect(() => {
-    if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
-      setTasks(JSON.parse(localStorage.tasks));
+    if (localStorage.tasks !== undefined) {
+      if (tasks.length === 0 && JSON.parse(localStorage.tasks).length !== 0) {
+        setTasks(JSON.parse(localStorage.tasks));
+      }
     }
-
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
@@ -87,7 +89,7 @@ export default function Tasks() {
         value={currentCategory}
         onChange={(e) => setCurrentCategory(e.target.value)}
       >
-        <option value="all">All</option>
+        <option value="All">All</option>
         {categories.map((element) => {
           return <option value={element}>{element}</option>;
         })}
@@ -107,6 +109,7 @@ export default function Tasks() {
         tasks={tasks}
         editTaskId={editTaskId}
       />
+      <SortTasks tasks={tasks} />
       <TasksList
         tasks={tasks}
         setTasks={setTasks}

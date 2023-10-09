@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+}
+
+
 .trash:hover {
   color: red;
 }
@@ -37,18 +42,28 @@
   cursor: pointer;
 }
 
-.taskContainer {
-  max-width: 600px;
+.sortContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 20px;
+}
+
+.sortContainer > div {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.sortContainer > div > svg {
+  margin-left: 5px;
+}
+
+.taskContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 20px;
 }
 
 .taskContainer > p {
     max-width: 200px;
     overflow-wrap: break-word;
-}
-
-.category {
-  text-transform: capitalize;
 }
