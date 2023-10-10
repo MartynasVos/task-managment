@@ -44,6 +44,15 @@ export default function EditCategories({
         const updatedTasks = tasks.filter((element) => {
           return element.category !== value;
         });
+        categories.forEach((element) => {
+          if (element === value) {
+            categories.splice(categories.indexOf(element), 1);
+          }
+        });
+        setCategories([...categories]);
+        localStorage.setItem("categories", JSON.stringify(categories));
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+        setSelectedCategory(categories[0]);
         return setTasks(updatedTasks);
       } else {
         return 0;
