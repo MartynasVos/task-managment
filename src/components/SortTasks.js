@@ -228,8 +228,7 @@ export default function SortTasks({ tasks }) {
     }
   }
   return (
-    <div>
-      <div className="sortContainer">
+    <div className="sort-container">
         <div>
           <p onClick={() => sortByTitle()}>Sort by Title</p>
           {titleSort[1]}
@@ -242,7 +241,6 @@ export default function SortTasks({ tasks }) {
           <p onClick={() => sortByDate()}>Sort by Date</p>
           {dateSort[1]}
         </div>
-      </div>
     </div>
   );
 }

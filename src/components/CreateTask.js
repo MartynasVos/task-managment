@@ -52,7 +52,7 @@ export default function CreateTask({
   }
 
   return (
-    <div>
+    <div className="flex-container">
       <button onClick={() => displayAddTaskModal(true)}>New Task</button>
       <div id="addTaskModal" className="modal">
         <div className="modal-content">

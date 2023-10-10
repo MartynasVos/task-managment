@@ -73,6 +73,10 @@ export default function Tasks() {
 
   return (
     <div className="container">
+      <div className="flex-container">
+        {currentDate} <br />
+        {currentTime}
+      </div>
       <CreateTask
         taskTitle={taskTitle}
         taskDescription={taskDescription}
@@ -86,8 +90,14 @@ export default function Tasks() {
         categories={categories}
         setTasks={setTasks}
       />
-      <div className="flex-container">
-      <EditCategories categories={categories} setCategories={setCategories} setSelectedCategory={setSelectedCategory} tasks={tasks} setTasks={setTasks} />
+      <div className="categories-container flex-container">
+        <EditCategories
+          categories={categories}
+          setCategories={setCategories}
+          setSelectedCategory={setSelectedCategory}
+          tasks={tasks}
+          setTasks={setTasks}
+        />
         <p>Select Category</p>
         <select
           name=""
@@ -116,16 +126,19 @@ export default function Tasks() {
         tasks={tasks}
         editTaskId={editTaskId}
       />
-      <input
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        type="text"
-      />
-      <select onChange={(e) => setSearchType(e.target.value)} name="" id="">
-        <option value="everywhere">Everywhere</option>
-        <option value="title">Title</option>
-        <option value="description">Description</option>
-      </select>
+      <div className="flex-container">
+        <input
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          type="text"
+          placeholder="search..."
+        />
+        <select onChange={(e) => setSearchType(e.target.value)} name="" id="">
+          <option value="everywhere">Everywhere</option>
+          <option value="title">Title</option>
+          <option value="description">Description</option>
+        </select>
+      </div>
       <SortTasks tasks={tasks} />
       <TasksList
         tasks={tasks}
@@ -135,10 +148,6 @@ export default function Tasks() {
         searchInput={searchInput}
         searchType={searchType}
       />
-      <div>
-        {currentDate} <br />
-        {currentTime}
-      </div>
     </div>
   );
 }

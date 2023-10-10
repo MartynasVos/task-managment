@@ -129,7 +129,7 @@ export default function TasksList({
         })
         .map((element) => {
           return (
-            <div className="taskContainer" id={element.id}>
+            <div className="task-container" id={element.id}>
               <div>
                 <p>Title:</p>
                 <p className="taskTitle">{element.taskTitle}</p>
